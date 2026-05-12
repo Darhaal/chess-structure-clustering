@@ -2,7 +2,11 @@
 
 Unsupervised machine learning project for discovering structural patterns in chess games using early-game features extracted from Lichess PGN games.
 
-This project was completed at **Florida Institute of Technology** for **MTH 4224 – Intro to Machine Learning**, taught by **Professor Ryan White**.
+This project was completed at Florida Institute of Technology for MTH 4224 – Intro to Machine Learning.
+
+## Repository Description
+
+Unsupervised learning project discovering structural patterns in chess games using clustering and engineered early-game features.
 
 ## Project Overview
 
@@ -16,11 +20,11 @@ Instead, this project studies whether chess games naturally form interpretable s
 - dynamic or unstable games
 - quieter structural games
 
-Because chess games do not have true style labels, this is treated as an **unsupervised learning** problem.
+Because chess games do not have true style labels, this is treated as an unsupervised learning problem.
 
 The main question is:
 
-> Do chess games naturally cluster into meaningful groups when described by engineered early-game features?
+Do chess games naturally cluster into meaningful groups when described by engineered early-game features?
 
 ## Main Idea
 
@@ -55,13 +59,13 @@ Raw PGN files are not included in this repository because they can be large.
 
 ## Feature Engineering
 
-The raw PGN files are processed using `python-chess`. Since clustering algorithms require numerical input, each game is converted into engineered chess features.
+The raw PGN files are processed using python-chess.
 
-### Main Feature Groups
+Since clustering algorithms require numerical input, each game is converted into engineered chess features.
 
-#### Dynamic Features
+Main feature groups include:
 
-These features describe tactical activity and instability:
+Dynamic features:
 
 - capture values
 - number of checks
@@ -69,9 +73,7 @@ These features describe tactical activity and instability:
 - Stockfish evaluation volatility
 - mean absolute engine evaluation
 
-#### Structural Features
-
-These features describe more positional aspects of the game:
+Structural features:
 
 - doubled pawns
 - isolated pawns
@@ -82,56 +84,54 @@ These features describe more positional aspects of the game:
 - king danger
 - minor piece development
 
-#### Opening Features
+Opening features:
 
-Opening information is included through ECO code groups.
+- ECO opening group
+- one-hot encoded opening-family information
 
 ECO/opening features are useful because different openings can lead to different structures. However, opening family is not the same thing as chess style, so these results must be interpreted carefully.
 
 ## Methods
 
-This project compares several unsupervised learning methods.
+This project compares several unsupervised learning methods:
 
-### PCA
+- PCA
+- K-Means Clustering
+- Gaussian Mixture Model
+- Agglomerative Clustering
+- DBSCAN
 
-Principal Component Analysis is used for dimensionality reduction and visualization.
-
-The first two principal components explain only about **13.92%** of total variance. This means the data structure is spread across many dimensions, and the 2D PCA projection does not show clean separated islands.
-
-### K-Means Clustering
+PCA is used for dimensionality reduction and visualization.
 
 K-Means is used as the main clustering baseline because it is simple and interpretable through centroids.
 
-Different values of `K` are tested using silhouette score.
+Gaussian Mixture Model is used as a soft clustering comparison.
 
-The best K-Means result was around **K = 7**, but the silhouette score was still low, so this should not be interpreted as proof of seven natural chess styles.
-
-### Gaussian Mixture Model
-
-Gaussian Mixture Model is used as a soft clustering comparison. It allows probabilistic cluster assignments and helps check whether groups overlap.
-
-### Agglomerative Clustering
-
-Agglomerative clustering is used as a hierarchical comparison method. It does not depend on centroid initialization like K-Means.
-
-### DBSCAN
+Agglomerative Clustering is used as a hierarchical comparison method.
 
 DBSCAN is used to detect dense regions and sparse or unusual regions of the feature space.
 
-DBSCAN is useful here because it does not force every game into a cluster. However, in this dataset it marks many games as sparse/noise, which supports the idea that chess games form a continuous feature space rather than clean dense groups.
-
 ## Results
-
-### Full Feature Space Clustering
 
 When all 43 features are used together, clustering separation is weak.
 
-| Model | Setting | Silhouette Score |
-|---|---:|---:|
-| K-Means | K = 3 | 0.0935 |
-| Gaussian Mixture Model | K = 3 | 0.0489 |
-| Agglomerative Clustering | K = 3 | 0.0761 |
-| DBSCAN | Core clusters | 0.0776 |
+Full feature-space clustering results:
+
+K-Means:
+- Setting: K = 3
+- Silhouette score: 0.0935
+
+Gaussian Mixture Model:
+- Setting: K = 3
+- Silhouette score: 0.0489
+
+Agglomerative Clustering:
+- Setting: K = 3
+- Silhouette score: 0.0761
+
+DBSCAN:
+- Setting: core clusters
+- Silhouette score: 0.0776
 
 These scores suggest that the full feature space does not naturally split into clean chess-style groups.
 
@@ -141,16 +141,27 @@ This does not mean the project failed. Instead, this is one of the main findings
 
 The feature group comparison was more informative than clustering all features together.
 
-| Feature Group | Number of Features | K-Means Silhouette |
-|---|---:|---:|
-| Dynamic Features | 7 | 0.2777 |
-| ECO / Opening Features | 20 | 0.2487 |
-| Structural Features | 16 | 0.1106 |
-| All Features | 43 | 0.0935 |
+Dynamic Features:
+- Number of features: 7
+- K-Means silhouette: 0.2777
 
-### Interpretation
+ECO / Opening Features:
+- Number of features: 20
+- K-Means silhouette: 0.2487
 
-Dynamic features produced the strongest clustering signal. This means that captures, checks, material volatility, and evaluation volatility separate games better than the full mixed feature set.
+Structural Features:
+- Number of features: 16
+- K-Means silhouette: 0.1106
+
+All Features:
+- Number of features: 43
+- K-Means silhouette: 0.0935
+
+## Interpretation
+
+Dynamic features produced the strongest clustering signal.
+
+This means that captures, checks, material volatility, and evaluation volatility separate games better than the full mixed feature set.
 
 ECO/opening features also produced strong structure, but this should be interpreted as opening-family structure, not necessarily pure playing style.
 
@@ -170,109 +181,44 @@ Structural features were weaker, but still useful for interpretation.
 
 6. Chess styles are better understood as tendencies on a spectrum, not strict natural labels.
 
-## Repository Structure
+## Files in This Repository
 
-<pre>
-.
-├── README.md
-├── LICENSE
-├── NOTICE.md
-├── requirements.txt
-├── notebooks/
-│   └── chess_structure_clustering.ipynb
-├── reports/
-│   └── MTH4224_Project2_Report.pdf
-├── slides/
-│   └── MTH4224_Project2_Slides.pdf
-└── figures/
-    ├── pca_projection.png
-    ├── kmeans_silhouette.png
-    ├── kmeans_stability.png
-    ├── centroid_heatmap.png
-    └── dbscan_sparse_noise.png
-</pre>
+All project files are stored in the root of the repository.
 
-The `figures/` folder is optional. It can be used if exported plots are included separately from the notebook.
+Expected files:
 
-## Installation
+- README.md
+- LICENSE
+- NOTICE.md
+- MTH4224 Project2 Jupyter.ipynb
+- MTH4224_Project2_Report.pdf
+- MTH4224_Project2_Slides.pdf
 
-Clone the repository:
+## How to View the Project
 
-<pre>
-git clone https://github.com/Darhaal/chess-structure-clustering.git
-cd chess-structure-clustering
-</pre>
+The easiest way to review the project is to open the PDF report or the Jupyter notebook directly on GitHub.
 
-Create and activate a virtual environment:
+The notebook contains the code, outputs, plots, and analysis.
 
-<pre>
-python -m venv venv
-</pre>
+The report gives the full written explanation of the project.
 
-On Windows:
+The slides summarize the project for presentation.
 
-<pre>
-venv\Scripts\activate
-</pre>
+## Reproducibility Notes
 
-On macOS/Linux:
+This repository is mainly shared as an academic and portfolio project.
 
-<pre>
-source venv/bin/activate
-</pre>
+To fully rerun the notebook, the user may need to manually install the Python libraries used inside the notebook.
 
-Install dependencies:
+Stockfish must be downloaded separately if engine-based features are recomputed.
 
-<pre>
-pip install -r requirements.txt
-</pre>
-
-## Requirements
-
-Main Python libraries used:
-
-<pre>
-numpy
-pandas
-matplotlib
-scikit-learn
-python-chess
-scipy
-jupyter
-</pre>
-
-If Stockfish-based evaluation features are recomputed, Stockfish must be downloaded separately and its path must be configured in the notebook.
-
-Stockfish binary is not included in this repository.
-
-## How to Run
-
-Open the notebook:
-
-<pre>
-jupyter notebook notebooks/chess_structure_clustering.ipynb
-</pre>
-
-Then run the notebook cells in order.
-
-The general pipeline is:
-
-1. Load or parse Lichess PGN games.
-2. Extract early-game chess features.
-3. Clean and preprocess the dataset.
-4. Apply scaling and transformations.
-5. Run PCA.
-6. Train clustering models.
-7. Compare silhouette scores.
-8. Analyze feature groups.
-9. Interpret clusters using centroid analysis.
-10. Summarize limitations and findings.
+Raw Lichess PGN files are not included because they are large.
 
 ## Important Notes
 
 This project is exploratory.
 
-The clusters should not be treated as exact labels such as "tactical", "positional", or "balanced". The results show tendencies in the feature space, not strict chess categories.
+The clusters should not be treated as exact labels such as tactical, positional, or balanced. The results show tendencies in the feature space, not strict chess categories.
 
 Low silhouette scores are part of the conclusion. They show that chess games do not naturally separate into a few clean groups when all engineered features are used together.
 
@@ -284,41 +230,9 @@ There are several limitations:
 - Long-term planning, piece coordination, and deep positional compensation are hard to encode numerically.
 - Stockfish evaluations are sampled only at selected positions to keep computation feasible.
 - Outlier filtering removes some unusual games that may be real tactical examples.
-- ECO/opening features may reflect opening choice rather than actual playing style.
-- There are no ground-truth labels for chess style, so evaluation depends on both metrics and interpretation.
-
-## Future Work
-
-Possible extensions:
-
-- Use a larger dataset.
-- Extract features from more phases of the game.
-- Compare early-game, middlegame, and endgame structures.
-- Use deeper Stockfish evaluation or more evaluation points.
-- Add graph-based board representations.
-- Use autoencoders or representation learning instead of only manual features.
-- Build an interactive visualization of clusters.
-- Compare clusters with player rating, time control, or opening family.
-
-## Tech Stack
-
-- Python
-- pandas
-- NumPy
-- scikit-learn
-- python-chess
-- Stockfish
-- matplotlib
-- Jupyter Notebook
+- Opening-family structure can overlap with playing-style interpretation.
+- There are no ground-truth labels for chess style.
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
-## Notice
-
-This repository is an academic and portfolio project.
-
-Raw Lichess PGN database files and the Stockfish engine binary are not included in this repository.
-
-Please do not submit this project as your own academic work.
+This project is licensed under the MIT License.
