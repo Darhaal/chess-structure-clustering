@@ -2,7 +2,7 @@
 
 Unsupervised machine learning project for discovering structural patterns in chess games using early-game features extracted from Lichess PGN games.
 
-This project was created for **MTH 4224 – Intro to Machine Learning**.
+This project was completed at **Florida Institute of Technology** for **MTH 4224 – Intro to Machine Learning**, taught by **Professor Ryan White**.
 
 ## Project Overview
 
