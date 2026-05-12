@@ -1,23 +1,29 @@
 # Notice
 
-This repository is an academic machine learning project created by Artem Okhten.
+This repository is an academic and portfolio project created by Artem Okhten.
+
+The project was developed for coursework at Florida Institute of Technology.
 
 ## Data
 
-The project uses publicly available chess games from the Lichess database.  
-The Lichess database exports are released under the Creative Commons CC0 license.
+This project may use publicly available chess games from the Lichess database.
 
-The raw Lichess PGN database files are not included in this repository.
+Raw Lichess PGN files are not included in this repository because they can be large and should be downloaded separately from the original source.
 
-## Chess Engine
+## External Engine
 
-Some experiments use Stockfish for chess position evaluation.
+Some experiments use Stockfish for chess-position evaluation.
 
-Stockfish is not included in this repository.  
-Users should download Stockfish separately from the official Stockfish website and comply with its GPLv3 license.
+The Stockfish engine binary is not included in this repository. If engine-based features or labels are recomputed, Stockfish must be downloaded and configured separately by the user.
 
-## Reports and Slides
+## Academic Integrity
 
-The included reports and slides are provided for academic and portfolio reference.
+This repository is shared for portfolio, learning, and reproducibility purposes.
 
-Please do not submit this work as your own academic assignment.
+Please do not submit this project, report, notebook, or code as your own academic work.
+
+## Disclaimer
+
+The models in this repository are experimental machine learning models.
+
+They are not chess engines and should not be used as authoritative chess evaluators.
